@@ -33,7 +33,7 @@ export ENGINE_REGISTRY_MIRROR=https://6udu7vtl.mirror.aliyuncs.com
 
 ## 集群
 
-![](../images/docker1.12.1.jpeg)
+![](/img/docker1.12.1.jpeg)
 
 ### 创建集群
 

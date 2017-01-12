@@ -76,7 +76,7 @@ ssh/fabric是我最初尝试的方案，但是需要进行一些列的开发，�
 
 ### 第二代架构
 
-![](../images/20161210/02-stack-dep-physic.jpg)
+![](/img/20161210/02-stack-dep-physic.jpg)
 
 1. 使用阿里云VPC，内部使用ansible管理服务器
 2. 通过ansible运行docker命令进行容器进行部署
@@ -84,7 +84,7 @@ ssh/fabric是我最初尝试的方案，但是需要进行一些列的开发，�
 
 ### 第三代架构
 
-![](../images/20161210/01-arch.png)
+![](/img/20161210/01-arch.png)
 
 第三代架构仍处于完善阶段，上图简单描述了我司三个region服务于应用的分布：
 
@@ -108,7 +108,7 @@ ssh/fabric是我最初尝试的方案，但是需要进行一些列的开发，�
 
 其中前端服务为主要为浏览服务，由cdn + slb + (nodejs+redis) 组成:
 
-![](../images/20161210/03-progress.jpg)
+![](/img/20161210/03-progress.jpg)
 
 用户访问域名后通过dns-load-balancer进行第一次负载，解析到cdn的不同cname，cdn判断请求类型：
 
@@ -118,7 +118,7 @@ ssh/fabric是我最初尝试的方案，但是需要进行一些列的开发，�
 4. 数据存在则返回，不存在则请求数据中心并缓存，再返回客户端
 5. 作为cdn源站，通过nginx/haproxy反向代理oss，走阿里云内网对外提供媒体资源
 
-![](../images/20161210/04-dep-hz-internal.jpg)
+![](/img/20161210/04-dep-hz-internal.jpg)
 
 #### 数据存储
 
@@ -156,7 +156,7 @@ kafka在内存占用上，大大超出rabbitmq，单机部署rabbitmq，当queue
 
 #### 项目结构：
 
-![](../images/20161210/05-prj.png)
+![](/img/20161210/05-prj.png)
 
 - Dockerfile
 - src放置项目代码
@@ -184,7 +184,7 @@ kafka在内存占用上，大大超出rabbitmq，单机部署rabbitmq，当queue
 
 构建成功后使用webhook推送到Bearychat通知Web组成员:
 
-![](../images/20161210/05-notify.png)
+![](/img/20161210/05-notify.png)
 
 hook接口处理会返回：
 
@@ -198,11 +198,11 @@ hook接口处理会返回：
 
 Hook服务收到信息后，根据tag判断应该发送到Bearychat的何种分组：
 
-![](../images/20161210/05-notify-group.png)
+![](/img/20161210/05-notify-group.png)
 
 测试组成员收到提示后，与开发确认测试要点后，可登录内部测试平台(使用rancher搭建)，选择对应的应用测试，并反馈结果给产品&项目经理，通过则验收完成。
 
-![](../images/20161210/05-test.png)
+![](/img/20161210/05-test.png)
 
 ### 部署
 

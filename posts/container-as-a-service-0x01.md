@@ -107,7 +107,7 @@ container即运行的服务或者应用，如nodejs的前端应用、php的后�
 
 ### #architect
 
-![](../images/dep-physic.jpg)
+![](/img/dep-physic.jpg)
 
 ## #practice
 
@@ -142,19 +142,19 @@ container即运行的服务或者应用，如nodejs的前端应用、php的后�
 
 一段时间后就看到在rancher-server的控制台里看到有如下机器：
 
-![](../images/rancher-hosts.png)
+![](/img/rancher-hosts.png)
 
 此时Stacks中创建一个Nginx-Test的Stack,创建一个Service（包含多个nginx的container），创建一个load balancer
 
-![](../images/stack-nginx-test-list.png)
+![](/img/stack-nginx-test-list.png)
 
 其结构如下：
 
-![](../images/stack-nginx-test-gyph.png)
+![](/img/stack-nginx-test-gyph.png)
 
 并能够根据需求动态伸缩应用数量：
 
-![](../images/stack-nginx-test-app-scale.png)
+![](/img/stack-nginx-test-app-scale.png)
 
 最后，我们需要将load balancer配置为elb/slb服务的后端，并最终将服务暴露到外网。
 

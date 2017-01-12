@@ -104,7 +104,7 @@ function generate() {
     if (regx.test(post)) {
       let tmp = fs.readFileSync(path.join(DIR, post), 'utf-8')
       let post_json = convert(tmp)
-      save('./posts/' + post.toLocaleLowerCase(), post_json.markdown)      
+      save('./posts/' + post_json.info.title.toLocaleLowerCase()+'.md', post_json.markdown)      
       record(post_json.info)      
     }
   })
