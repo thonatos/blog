@@ -117,11 +117,11 @@ docker push
 ### #容器部署
 前一篇我们使用rancher-server作为docker的管理中心（可选的还有dcos、ucp等），其实在启动镜像的时候，我们就已经在选择镜像了
 
-![](/img/rancher-c-i-image.png)
+![](../images/rancher-c-i-image.png)
 
 “nginx”就是镜像，这个镜像可以来自docker-hub也可以来自私有Registry
 
-![](/img/rancher-registry-add.png)
+![](../images/rancher-registry-add.png)
 
 ### #混合方案
 
