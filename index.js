@@ -104,8 +104,8 @@ function generate() {
     if (regx.test(post)) {
       let tmp = fs.readFileSync(path.join(DIR, post), 'utf-8')
       let post_json = convert(tmp)
-      save('./posts/' + post.toLocaleLowerCase(), post_json.markdown)
-      record(post_json.info)
+      save('./posts/' + post.toLocaleLowerCase(), post_json.markdown)      
+      record(post_json.info)      
     }
   })
 
@@ -114,14 +114,48 @@ function generate() {
   save('./json/posts.json', blog_posts)
 
   // add version  
-  const hashids = new Hashids()
-  const date = moment()
-  save('./version.json', {
-    date: date.toString(),
-    version: hashids.encode(date.unix())
-  })  
-
+  // const hashids = new Hashids()
+  // const date = moment()
+  // save('./version.json', {
+  //   date: date.toString(),
+  //   version: hashids.encode(date.unix())
+  // })  
+  
 }
 
 
 generate()
+
+function readme(){
+
+  function t(j){
+    let str = ''
+    for(l1 in j){
+      str += `- ${l1} \n`
+      for (let l2 in j[l1]) {
+        str += `  - [${j[l1][l2]}](posts/${j[l1][l2]}.md) \n`
+      }
+    }
+    return str + '\n'
+  }
+
+  var str = `
+# Blog
+
+Blog . import post from hexo
+
+` + 
+ 
+`## tags
+
+` + t(blog_tags) + 
+
+`## archives
+
+` + t(blog_archives)
+
+  return str
+
+}
+
+save('./README.md', readme())
