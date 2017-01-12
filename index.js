@@ -124,8 +124,6 @@ function generate() {
 }
 
 
-generate()
-
 function readme(){
 
   function t(j){
@@ -153,9 +151,9 @@ Blog . import post from hexo
 `## archives
 
 ` + t(blog_archives)
-
-  return str
-
+  
+  save('./README.md', str)
 }
 
-save('./README.md', readme())
+generate()
+readme()
