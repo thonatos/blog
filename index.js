@@ -89,17 +89,16 @@ function save(name, data) {
 }
 
 
-function generate() {
+function build() {
 
-  const DIR = '/Users/thonatos/workspace/thonatos/blog.thonatos.com/source/_posts'
+  const DIR = './_posts'
   const posts = fs.readdirSync(DIR)
   const posts_size = posts.length
 
   posts.map((post, index) => {    
     const regx = new RegExp(/.*(.md|.markdown)$/)
-    let percent = Math.ceil((index + 1) / posts_size * 100)        
-    
-    console.log(`Completed: ${percent}%, Dealing: ` + post +' \r')
+    // let percent = Math.ceil((index + 1) / posts_size * 100)            
+    // console.log(`Completed: ${percent}%, Dealing: ` + post +' \r')
     
     if (regx.test(post)) {
       let tmp = fs.readFileSync(path.join(DIR, post), 'utf-8')
@@ -112,21 +111,25 @@ function generate() {
   save('./json/tags.json', blog_tags)
   save('./json/archives.json', blog_archives)
   save('./json/posts.json', blog_posts)
-
-  // add version  
-  // const hashids = new Hashids()
-  // const date = moment()
-  // save('./version.json', {
-  //   date: date.toString(),
-  //   version: hashids.encode(date.unix())
-  // })  
   
 }
 
 
-function readme(){
+// add version  
+function addVersion(){  
+  const hashids = new Hashids()
+  const date = moment()
+  save('./version.json', {
+    date: date.toString(),
+    version: hashids.encode(date.unix())
+  })    
+}
+
+function genREADME(){
 
   function t(j){
+    // - l1
+    //   - l2
     let str = ''
     for(l1 in j){
       str += `- ${l1} \n`
@@ -134,26 +137,22 @@ function readme(){
         str += `  - [${j[l1][l2]}](posts/${j[l1][l2]}.md) \n`
       }
     }
-    return str + '\n'
+    return str
   }
 
-  var str = `
-# Blog
+  var str = [
+    '# Blog',
+    'Blog . import post from hexo',
+    '## tags',
+    t(blog_tags),
+    '## archives',
+    t(blog_archives)
+  ].join('\n\n')
 
-Blog . import post from hexo
-
-` + 
- 
-`## tags
-
-` + t(blog_tags) + 
-
-`## archives
-
-` + t(blog_archives)
   
   save('./README.md', str)
 }
 
-generate()
-readme()
+build()
+addVersion()
+genREADME()

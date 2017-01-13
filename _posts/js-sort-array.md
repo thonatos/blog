@@ -1,0 +1,25 @@
+---
+title: js-sort-array
+date: 2015-10-23 10:12:56
+tags: js
+---
+
+
+## #code
+
+```
+/**
+ * 对数组根据其首字母进行排序
+ *
+ * @param arr
+ * @returns {*}
+ */
+utils.sortArray = function (arr) {
+
+    arr.sort(function (a, b) {
+        return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
+    });
+
+    return arr;
+};
+```
