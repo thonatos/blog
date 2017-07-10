@@ -94,8 +94,9 @@ function generate() {
     for (l1 in j) {
       str += `- ${l1} \n`
       for (let l2 in j[l1]) {
-        str += `  - [${j[l1][l2]}](posts/${j[l1][l2]}.md) \n`
+        str += `  - [${j[l1][l2]}](posts/${j[l1][l2]}.md)\n`
       }
+      str += '\n'
     }
     return str
   }
@@ -116,11 +117,8 @@ function generate() {
     mkd(tags),
     '## archives',
     mkd(archives),
-    `
-    ## version
-    \`${JSON.stringify(version)}\`
-    `
-  ].join('\n\n')
+    `## version \n\`${JSON.stringify(version)}\``    
+  ].join('\n')
 
 
   write('./json/db.json', db)
