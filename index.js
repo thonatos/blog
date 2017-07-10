@@ -113,10 +113,10 @@ function generate() {
   let str = [
     '# Blog',
     'Blog . import post from hexo',
+    '## archives',
+    mkd(archives),    
     '## tags',
     mkd(tags),
-    '## archives',
-    mkd(archives),
     `## version \n\`${JSON.stringify(version)}\``    
   ].join('\n')
 
