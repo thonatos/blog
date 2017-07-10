@@ -4,134 +4,94 @@ const yaml = require('js-yaml')
 const moment = require('moment')
 const Hashids = require('hashids')
 
-var blog_posts = []
-var blog_tags = {}
-var blog_archives = {}
-
+// vars
+const DIR_POST = './_posts'
 
 function convert(post) {
+  const regx = new RegExp(/---(.|\n)*?---/)                                           // regx      
+  const info = yaml.load(post.match(regx)[0].replace(/---/g, ''), { json: true })     // info    
+  const markdown = post.replace(regx, '$1')                                           // markdown
+  return { info, markdown }
+}
 
-  // split yaml & markdown
-  const regx = new RegExp(/---(.|\n)*?---/)
+function write(name, data) {
+  fs.writeFileSync(
+    name,
+    typeof (data) === 'string'
+      ? data
+      : JSON.stringify(data, null, '  '),
+    { encoding: 'utf8' }
+  )
+}
 
-  // yml
-  const yml_string = post.match(regx)[0].replace(/---/g, '')
-  const info = yaml.load(yml_string, { json: true })
-
-  // markdown
-  const markdown = post.replace(regx, '$1')
-
+function storage(storage) {
+  let _storage = storage || {}
   return {
-    info: info,
-    markdown: markdown
-  }
-}
-
-
-function record(info) {
-
-  // [
-  //   // title | 
-  //   'b:p:title',
-  //     title
-  //   // tags | set
-  //   'b:t:tag',
-  //     tag: [
-  //       title
-  //     ]  
-  //   // archive | set
-  //   'b:a:year'
-  //     2015: [
-  //       title
-  //     ]
-  // ]
-
-  const title = info.title
-  const tags = info.tags
-  const date = moment(info.date).year()
-  const types = [tags, date]
-  const storages = [blog_tags, blog_archives]
-
-  function store(key, value, storage) {
-    // String
-    if (storage[key]) {
-      storage[key].push(value)
-    } else {
-      storage[key] = [value]
+    gets: () => {
+      return _storage
+    },
+    save: (key, value) => {
+      _storage[key]
+        && _storage[key].push(value)
+        || (_storage[key] = [value])
     }
   }
-
-  blog_posts.push(title)
-
-  types.map(_types => {
-    const storage = storages[types.indexOf(_types)]
-
-    // tags
-    if (Array.isArray(_types)) {
-      // Array
-      _types.map(_type => {
-        store(_type, title, storage)
-      })
-    } else {
-      store(_types, title, storage)
-    }
-  })
 }
-
-
-function save(name, data) {
-  if(typeof(data) === 'string'){
-    fs.writeFileSync(name, data, { encoding: 'utf8' })
-  }else{
-    fs.writeFileSync(name, JSON.stringify(data, null, '  '), { encoding: 'utf8' })
-  }
-  
-}
-
 
 function build() {
+  // read dir & get posts
+  const posts = fs.readdirSync(DIR_POST)
 
-  const DIR = './_posts'
-  const posts = fs.readdirSync(DIR)
-  const posts_size = posts.length
+  let _tags = storage()
+  let _archives = storage()
+  let _posts = []
 
-  posts.map((post, index) => {    
-    const regx = new RegExp(/.*(.md|.markdown)$/)
-    // let percent = Math.ceil((index + 1) / posts_size * 100)            
-    // console.log(`Completed: ${percent}%, Dealing: ` + post +' \r')
-    
-    if (regx.test(post)) {
-      let tmp = fs.readFileSync(path.join(DIR, post), 'utf-8')
-      let post_json = convert(tmp)
-      save('./posts/' + post_json.info.title.toLocaleLowerCase()+'.md', post_json.markdown)      
-      record(post_json.info)      
-    }
-  })
+  _posts = posts
+    .filter(post => {
+      return new RegExp(/.*(.md|.markdown)$/).test(post)
+    })
+    .map(post => {
+      let file = fs.readFileSync(path.join(DIR_POST, post), 'utf-8')
 
-  save('./json/tags.json', blog_tags)
-  save('./json/archives.json', blog_archives)
-  save('./json/posts.json', blog_posts)
-  
+      let { info, markdown } = convert(file)
+      let name = './posts/' + info.title.toLocaleLowerCase() + '.md'
+
+      let { title, date, tags } = info
+
+      // archives
+      let year = moment(date).year()
+      _archives.save(year, title)
+
+      // tags
+      Array.isArray(tags)
+        && tags.map(tag => {
+          _tags.save(tag, title)
+        })
+        || _tags.save(tags, title)
+
+      // write to dir
+      write(name, markdown)
+
+      // record to db
+      return Object.assign({
+        file: name
+      }, info)
+    })
+
+  return {
+    posts: _posts,
+    tags: _tags.gets(),
+    archives: _archives.gets()
+  }
 }
 
 
-// add version  
-function addVersion(){  
-  const hashids = new Hashids()
-  const date = moment()
-  save('./version.json', {
-    date: date.toString(),
-    version: hashids.encode(date.unix())
-  })    
-}
-
-function genREADME(){
-
-  function t(j){
+function generate() {
+  function mkd(j) {
     // - l1
     //   - l2
     let str = ''
-    for(l1 in j){
+    for (l1 in j) {
       str += `- ${l1} \n`
       for (let l2 in j[l1]) {
         str += `  - [${j[l1][l2]}](posts/${j[l1][l2]}.md) \n`
@@ -140,19 +100,31 @@ function genREADME(){
     return str
   }
 
-  var str = [
+  let date = moment()
+  let version = {
+    date: date.toString(),
+    version: new Hashids().encode(date.unix())
+  }
+
+  let db = build()
+  let { tags, archives } = db
+
+  let str = [
     '# Blog',
     'Blog . import post from hexo',
     '## tags',
-    t(blog_tags),
+    mkd(tags),
     '## archives',
-    t(blog_archives)
+    mkd(archives),
+    `
+    ## version
+    \`${JSON.stringify(version)}\`
+    `
   ].join('\n\n')
 
-  
-  save('./README.md', str)
+
+  write('./json/db.json', db)
+  write('./README.md', str)
 }
 
-build()
-addVersion()
-genREADME()
+generate()

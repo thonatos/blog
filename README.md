@@ -158,3 +158,9 @@ Blog . import post from hexo
   - [set-acl-for-nginx-php-and-code-maintainer](posts/set-acl-for-nginx-php-and-code-maintainer.md) 
   - [use-commitizen-instead-of-git-commit](posts/use-commitizen-instead-of-git-commit.md) 
   - [xml-to-json-json-to-xml-with-python](posts/xml-to-json-json-to-xml-with-python.md) 
+
+
+
+    ## version
+    `{"date":"Mon Jul 10 2017 15:56:13 GMT+0800","version":"V5AvAMB"}`
+    
