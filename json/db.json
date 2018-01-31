@@ -97,6 +97,15 @@
       "tags": "linux"
     },
     {
+      "file": "./posts/deploy-stun-and-turn-servers.md",
+      "title": "deploy-stun-and-turn-servers",
+      "date": "2018-01-31T15:34:21.000Z",
+      "tags": [
+        "webrtc",
+        "docker"
+      ]
+    },
+    {
       "file": "./posts/detect-browser-version.md",
       "title": "detect-browser-version",
       "date": "2015-09-14T10:02:06.000Z",
@@ -355,6 +364,7 @@
       "container-as-a-service-0x00",
       "container-as-a-service-0x01",
       "container-as-a-service-0x02",
+      "deploy-stun-and-turn-servers",
       "dockerization-and-DevOps-for-insta360",
       "dockerizing-a-node-js-web-app",
       "dockerizing-your-frontend-project",
@@ -414,6 +424,9 @@
     "linux": [
       "deploy-node-app-with-systemd",
       "set-acl-for-nginx-php-and-code-maintainer"
+    ],
+    "webrtc": [
+      "deploy-stun-and-turn-servers"
     ],
     "node": [
       "detect-mobile-browser",
@@ -531,6 +544,9 @@
       "set-acl-for-nginx-php-and-code-maintainer",
       "use-commitizen-instead-of-git-commit",
       "xml-to-json-json-to-xml-with-python"
+    ],
+    "2018": [
+      "deploy-stun-and-turn-servers"
     ]
   }
 }
